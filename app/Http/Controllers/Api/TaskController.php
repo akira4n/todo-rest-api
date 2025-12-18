@@ -38,7 +38,9 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $task = Task::findOrFail($id);
+
+        return response()->json($task, 200);
     }
 
     /**
@@ -46,7 +48,16 @@ class TaskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $task = Task::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'sometimes|required|string|max:255|',
+            'is_done' => 'boolean',
+        ]);
+
+        $task->update($validated);
+
+        return response()->json($task, 200);
     }
 
     /**
