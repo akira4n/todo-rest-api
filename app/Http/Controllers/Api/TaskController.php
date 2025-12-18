@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -12,7 +13,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $task = Task::all();
+
+        return response()->json(['data' => $task], 200);
     }
 
     /**
@@ -20,7 +23,14 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'is_done' => 'boolean'
+        ]);
+
+        $task = Task::create($validated);
+
+        return response()->json($task, 201);
     }
 
     /**
